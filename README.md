@@ -1,1 +1,2 @@
-# Dise-osDePatrones
+# Bridge
+## También llamado: Puente
