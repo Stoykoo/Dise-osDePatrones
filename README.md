@@ -35,71 +35,109 @@ Bridge es un patrón de diseño estructural que te permite dividir una clase gra
 
 #  Ejemplo en C# del Patrón Bridge
 <p align="justify">
--  ***Abstracción***: En este caso, la **abstracción** se centra en el concepto de un jugador de fútbol, independientemente de cómo juegue. La abstracción encapsula el comportamiento general que un jugador debe tener, pero delega los detalles específicos a una "implementación" concreta.
- </p>
- 
- <p align="justify">
--  ***Implementación***: La **implementación** en el patrón Bridge se refiere a la parte que proporciona la lógica concreta de cómo se realiza una acción. En este caso, la **implementación** se centra en las estrategias de juego (`Ataque`, `EstrategiaDefensiva`). Estas clases implementan el comportamiento específico de cómo los jugadores deben actuar en el campo.
+El objetivo es separar la abstracción (que en este caso es la conexión a una base de datos) de la implementación (el tipo específico de base de datos) para que puedas cambiar el tipo de base de datos sin modificar el código de la abstracción.
 </p>
 
 ```using System;
 
 // Interfaz de Implementación
-public interface IEstrategia
+public interface IDatabaseImplementor
 {
-    void Jugar();
+    void Connect();
+    void Disconnect();
+    void ExecuteQuery(string query);
 }
 
 // Clases Concretas de Implementación
-public class Ataque : IEstrategia
+public class MySQLImplementor : IDatabaseImplementor
 {
-    public void Jugar()
+    public void Connect()
     {
-        Console.WriteLine("Jugando al ataque");
+        Console.WriteLine("Conectado a MySQL");
+    }
+
+    public void Disconnect()
+    {
+        Console.WriteLine("Desconectado de MySQL");
+    }
+
+    public void ExecuteQuery(string query)
+    {
+        Console.WriteLine($"Ejecutando consulta en MySQL: {query}");
     }
 }
 
-public class EstrategiaDefensiva : IEstrategia
+public class SQLServerImplementor : IDatabaseImplementor
 {
-    public void Jugar()
+    public void Connect()
     {
-        Console.WriteLine("Jugando a la defensa");
+        Console.WriteLine("Conectado a SQL Server");
+    }
+
+    public void Disconnect()
+    {
+        Console.WriteLine("Desconectado de SQL Server");
+    }
+
+    public void ExecuteQuery(string query)
+    {
+        Console.WriteLine($"Ejecutando consulta en SQL Server: {query}");
     }
 }
 
 // Clase Abstracción
-public abstract class Jugador
+public abstract class Database
 {
-    protected IEstrategia estrategia;
+    protected IDatabaseImplementor implementor;
 
-    protected Jugador(IEstrategia estrategia)
+    protected Database(IDatabaseImplementor implementor)
     {
-        this.estrategia = estrategia;
+        this.implementor = implementor;
     }
 
-    public abstract void Jugar();
+    public abstract void OpenConnection();
+    public abstract void CloseConnection();
+    public abstract void RunQuery(string query);
 }
 
 // Clases Concretas de Abstracción
-public class Delantero : Jugador
+public class AbstractionMySQL : Database
 {
-    public Delantero(IEstrategia estrategia) : base(estrategia) { }
+    public AbstractionMySQL(IDatabaseImplementor implementor) : base(implementor) { }
 
-    public override void Jugar()
+    public override void OpenConnection()
     {
-        Console.Write("Delantero: ");
-        estrategia.Jugar();
+        implementor.Connect();
+    }
+
+    public override void CloseConnection()
+    {
+        implementor.Disconnect();
+    }
+
+    public override void RunQuery(string query)
+    {
+        implementor.ExecuteQuery(query);
     }
 }
 
-public class Defensa : Jugador
+public class AbstractionSQLServer : Database
 {
-    public Defensa(IEstrategia estrategia) : base(estrategia) { }
+    public AbstractionSQLServer(IDatabaseImplementor implementor) : base(implementor) { }
 
-    public override void Jugar()
+    public override void OpenConnection()
     {
-        Console.Write("Defensa: ");
-        estrategia.Jugar();
+        implementor.Connect();
+    }
+
+    public override void CloseConnection()
+    {
+        implementor.Disconnect();
+    }
+
+    public override void RunQuery(string query)
+    {
+        implementor.ExecuteQuery(query);
     }
 }
 
@@ -108,18 +146,20 @@ class Program
 {
     static void Main()
     {
-        // Crear jugadores con diferentes estrategias
-        Jugador delanteroAtaque = new Delantero(new Ataque());
-        delanteroAtaque.Jugar();  // Salida: Delantero: Jugando al ataque
+        // Usar MySQL con la abstracción
+        Database mySQLDatabase = new AbstractionMySQL(new MySQLImplementor());
+        mySQLDatabase.OpenConnection();  // Salida: Conectado a MySQL
+        mySQLDatabase.RunQuery("SELECT * FROM Users");  // Salida: Ejecutando consulta en MySQL: SELECT * FROM Users
+        mySQLDatabase.CloseConnection();  // Salida: Desconectado de MySQL
 
-        Jugador defensaDefensiva = new Defensa(new EstrategiaDefensiva());
-        defensaDefensiva.Jugar();  // Salida: Defensa: Jugando a la defensa
-
-        // Cambiar estrategia fácilmente
-        Jugador delanteroDefensivo = new Delantero(new EstrategiaDefensiva());
-        delanteroDefensivo.Jugar();  // Salida: Delantero: Jugando a la defensa
+        // Usar SQL Server con la abstracción
+        Database sqlServerDatabase = new AbstractionSQLServer(new SQLServerImplementor());
+        sqlServerDatabase.OpenConnection();  // Salida: Conectado a SQL Server
+        sqlServerDatabase.RunQuery("SELECT * FROM Products");  // Salida: Ejecutando consulta en SQL Server: SELECT * FROM Products
+        sqlServerDatabase.CloseConnection();  // Salida: Desconectado de SQL Server
     }
 }
+
 ```
 
 
