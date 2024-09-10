@@ -156,6 +156,7 @@ class Program
 }
 
 ```
+## Salida: 
 ![Salida](Imagenes/SQL.PNG)
 
 ### Ventajas
