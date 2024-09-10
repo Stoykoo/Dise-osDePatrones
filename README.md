@@ -25,11 +25,6 @@ Bridge es un patrón de diseño estructural que te permite dividir una clase gra
 -   Abstracción: Define la interfaz de alto nivel para los clientes.
     
 -   Implementación: Define la interfaz para la implementación que será "conectada" a la abstracción.
-    
-
-***Diagrama UML:***
-
-![UML de la estructura](Imagenes/UML.PNG)
 
 </p>
 
@@ -161,7 +156,7 @@ class Program
 }
 
 ```
-
+![Salida](Imagenes/SQL.PNG)
 
 ### Ventajas
 
