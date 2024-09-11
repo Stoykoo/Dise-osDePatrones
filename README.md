@@ -59,7 +59,7 @@ public class MySQLImplementor : IDatabaseImplementor
 
     public void ExecuteQuery(string query)
     {
-        Console.WriteLine($"Ejecutando consulta en MySQL: {query}");
+        Console.WriteLine("Ejecutando consulta en MySQL: {query}");
     }
 }
 
@@ -77,7 +77,7 @@ public class SQLServerImplementor : IDatabaseImplementor
 
     public void ExecuteQuery(string query)
     {
-        Console.WriteLine($"Ejecutando consulta en SQL Server: {query}");
+        Console.WriteLine("Ejecutando consulta en SQL Server: {query}");
     }
 }
 
@@ -138,9 +138,9 @@ public class AbstractionSQLServer : Database
 }
 
 // Uso del Patrón Bridge
-class Program
+public class Program
 {
-    static void Main()
+    public static void Main()
     {
         // Usar MySQL con la abstracción
         Database mySQLDatabase = new AbstractionMySQL(new MySQLImplementor());
@@ -155,6 +155,7 @@ class Program
         sqlServerDatabase.CloseConnection();  // Salida: Desconectado de SQL Server
     }
 }
+
 
 ```
 ## Salida: 
