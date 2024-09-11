@@ -33,7 +33,8 @@ Bridge es un patrón de diseño estructural que te permite dividir una clase gra
 El objetivo es separar la abstracción (que en este caso es la conexión a una base de datos) de la implementación (el tipo específico de base de datos) para que puedas cambiar el tipo de base de datos sin modificar el código de la abstracción.
 </p>
 
-```using System;
+```
+using System;
 
 // Interfaz de Implementación
 public interface IDatabaseImplementor
